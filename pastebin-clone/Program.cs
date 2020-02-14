@@ -6,10 +6,9 @@ namespace pastebin_clone
 {
     class Program
     {
-        
         static void Main(string[] args)
         {
-            const string url = "https://pastebin.com/raw/";
+            const string url = "https://pastebin.com/raw/"; //Pastebin's raw file directory. Files in this directory are untouched text files which are downloaded by the program.
             bool debugMode = false;
             string outputFile = null;
             string inputURL = null;
@@ -17,12 +16,12 @@ namespace pastebin_clone
             bool customName = false;
             int pos = Array.IndexOf(args, "-i");
 
-            if (args.Length == 0 || pos <= -1)
+            if (args.Length == 0 || pos <= -1) //Checks to see if the user has entered the "-i" argument in the console.
             {
                 Console.WriteLine("Usage:\npastebin-clone.exe [options] <URL>\n\n-i: Put the Paste you'd like to download here.\n\n-o: Output file destination.\n\n-d: Run in debug mode.");
             }
 
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < args.Length; i++) //Checks each argument entered by the user.
             {
                 switch(args[i])
                 {
@@ -37,7 +36,7 @@ namespace pastebin_clone
                             fullPath = Path.GetFullPath(outputFile);
                             if(fullPath.Length >= 4)
                             {
-                                if(fullPath.Substring(fullPath.Length - 4) == ".txt")
+                                if(fullPath.Substring(fullPath.Length - 4) == ".txt") //Checks if the output path the user entered ends with ".txt" to determine whether to write to a custom named file.
                                 {
                                     customName = true;
                                 }
@@ -50,6 +49,7 @@ namespace pastebin_clone
                             return;
                         }
                         break;
+
                     case "-i":
                         inputURL = args[i + 1];
                         if(!inputURL.ToUpper().Contains("PASTEBIN"))
@@ -66,11 +66,11 @@ namespace pastebin_clone
                 Console.WriteLine("Output file: " + outputFile);
             }
 
-            string response = "";
             #region Download
+            string response = "";
             if(inputURL != null)
             {;
-                HttpWebRequest get = (HttpWebRequest)WebRequest.Create(url + inputURL.Substring(inputURL.Length - 8));
+                HttpWebRequest get = (HttpWebRequest)WebRequest.Create(url + inputURL.Substring(inputURL.Length - 8)); //Creates a get request targeting "pastebin.com/raw/<paste id>"
                 get.Method = "GET";
 
                 WebResponse rp = get.GetResponse();
